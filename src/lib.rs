@@ -22,7 +22,7 @@ extern crate std;
 #[cfg(feature = "rand")]
 extern crate rand;
 
-#[cfg(feature = "rand")]
+#[cfg(all(feature = "rand", feature = "std"))]
 mod random_state;
 
 mod seeded_state;
@@ -48,7 +48,10 @@ pub type FxHashSet<V> = HashSet<V, BuildHasherDefault<FxHasher>>;
 #[cfg(feature = "rand")]
 pub use random_state::{FxHashMapRand, FxHashSetRand, FxRandomState};
 
-pub use seeded_state::{FxHashMapSeed, FxHashSetSeed, FxSeededState};
+#[cfg(feature = "std")]
+pub use seeded_state::{FxHashMapSeed, FxHashSetSeed};
+
+pub use seeded_state::FxSeededState;
 
 /// A speedy hash algorithm for use within rustc. The hashmap in liballoc
 /// by default uses SipHash which isn't quite as speedy as we want. In the
